@@ -220,6 +220,7 @@ ul.tabs {
   position: fixed;
   right: 20px;
   bottom: 20px;
+  height: auto;
   z-index: 2;
   /* padding: 4px; */
   background-color: #fafafa;
@@ -244,4 +245,5 @@ ul.tabs {
   border-bottom-left-radius: inherit;
   border-bottom-right-radius: inherit;
   display: block;
+  overflow: scroll;
 }

@@ -80,14 +80,20 @@
               >General</a
             >
           </li>
-          <li>
+          <!--<li>
             <a
               class="tabs tablink"
               onclick="openSidebarTab(event,'tab-features')"
               >Features</a
             >
+          </li>-->
+          <li>
+            <a
+                    class="tabs tablink"
+                    onclick="openSidebarTab(event,'tab-vulnerabilities')"
+            >Vulnerabilities</a
+            >
           </li>
-          <!-- <li><a class="tabs tablink" onclick="openSidebarTab(event,'tab-bugs')">Bugs</a></li> -->
         </ul>
       </div>
       <div class="sidebar-tab" id="tab-basic">
@@ -175,24 +181,24 @@
           <!--button class="sidebar" id="collapseEdges">Collapse Edges</button-->
         </div>
       </div>
-      <div class="sidebar-tab" id="tab-features" style="display: none">
+      <!--<div class="sidebar-tab" id="tab-features" style="display: none">
         <div class="menu">
           <h2>Feature highlight</h2>
 
-          <!-- <label for="feature">
+          &lt;!&ndash; <label for="feature">
               Select a specific feature that you want to visualize.
               To select multiple features, hold down the CTRL (or CMD) key.
-            </label> -->
-          <!-- <br />
+            </label> &ndash;&gt;
+          &lt;!&ndash; <br />
             <select id="selectfeature" size="20" multiple>
               <option value="All">All (default)</option>
             </select>
             <p />
-            <Button class="sidebar" onclick="showTrace(checkSelectedFeatures())">Show</Button> -->
+            <Button class="sidebar" onclick="showTrace(checkSelectedFeatures())">Show</Button> &ndash;&gt;
           <div id="selectfeature"></div>
         </div>
-      </div>
-      <!-- <div class="sidebar-tab" id="tab-bugs" style="display:none;"></div> -->
+      </div>-->
+      <div class="sidebar-tab" id="tab-vulnerabilities" style="display:none;"></div>
     </div>
     <div id="infobox">
       <div id="infotitle"></div>

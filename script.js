@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       const styleResponse = await fetch('style.cycss');
       const style = await styleResponse.text();
 
-      initCy([eles, style]);
+      await initCy([eles, style]);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -143,9 +143,10 @@ const initCy = async function (payload) {
     n.style('background-color', `rgb(${grey},${grey},${grey})`);
   });
 
-  fillRSFilter(cy);
+  //fillRSFilter(cy);
   fillRelationshipToggles(cy);
-  fillFeatureDropdown(cy);
+  //fillFeatureDropdown(cy);
+  fillBugsDropdown(cy);
 
   bindRouters();
 
@@ -159,7 +160,7 @@ const initCy = async function (payload) {
   showPackages(cbShowPackages);
 
   zoom.value = cy.zoom();
-  // cy.nodes().filter('node').forEach(n => (bindPopper(n)))
+  cy.nodes().filter('node').forEach(n => (bindPopper(n)))
   return cy;
 }
 
@@ -228,9 +229,11 @@ function bindRouters() {
     var infoText = document.createElement("p");
 
     infoHeader.textContent = evt.target.data()["properties"]["simpleName"];
-    infoText.textContent = evt.target.data()["properties"]["description"] ? evt.target.data()["properties"]["description"] : "(no description)";
+    infoSubeader.innerHTML = `<b><i>${evt.target.data()["properties"]["kind"]
+    }</i></b>`;
+    infoText.innerHTML = evt.target.data()["properties"]["vulnerabilities"] ? nodeVul(evt) : "";
 
-    if (evt.target.data()['labels'].includes('Structure')) {
+   /* if (evt.target.data()['labels'].includes('Structure')) {
       if (evt.target.data()["properties"]["rs"]) {
         infoBody.style.backgroundColor =
           role_stereotypes[evt.target.data()["properties"]["rs"]].color_light;
@@ -245,13 +248,45 @@ function bindRouters() {
       infoBody.style.backgroundColor = "inherit";
       infoSubeader.innerHTML = `<b><i>${evt.target.data()["properties"]["kind"]
         }</i></b>`;
-    }
+    }*/
 
     infoBody.innerHTML = "";
     infoBody.appendChild(infoHeader);
     infoBody.appendChild(infoSubeader);
     infoBody.appendChild(infoText);
+    if(evt.target.popper){
+      if (!evt.target.hasClass('dimmed')) {
+        let tooltipId = `popper-target-${evt.target.id()}`;
+        if (document.getElementById(tooltipId)) {
+          document.getElementById(tooltipId).classList.add("active");
+        }
+      }
+    }
   });
+  cy.on("mouseout","node",(evt)=>{
+    if(evt.target.popper){
+      if (!evt.target.hasClass('dimmed')) {
+        let tooltipId = `popper-target-${evt.target.id()}`;
+        if (document.getElementById(tooltipId)) {
+          document.getElementById(tooltipId).classList.remove("active");
+        }
+      }
+    }
+  })
+}
+
+const nodeVul = function(evt) {
+  const data = evt.target.data()["properties"]["vulnerabilities"]
+  const counts = {}
+  let output = "<ul>"
+  data.forEach(vul=>{
+    counts[vul['analysis_name']] = counts[vul['analysis_name']] ? counts[vul['analysis_name']] +1 : 1
+  })
+  Object.keys(counts).forEach(k=>{
+    output+="<li>"+k+": "+counts[k]+"</li>"
+  })
+  output+="</ul>"
+  return output
 }
 
 /* Sidebar Utility Functions */
@@ -517,10 +552,9 @@ const fillBugsDropdown = function (_cy) {
 
 
   let bugList = [...bugsSet]
-  // console.log(bugList)
 
   // Get the dropdown element.
-  const dropdown = document.getElementById("tab-bugs");
+  const dropdown = document.getElementById("tab-vulnerabilities");
   dropdown.innerHTML = "";
 
   bugList.forEach(bug => {
@@ -750,16 +784,16 @@ function bindPopper(target) {
     });
 
 
-    target.on('mouseover', () => {
+    /*target.on('mouseover', () => {
       if (!target.hasClass('dimmed')) {
         if (document.getElementById(tooltipId)) {
           document.getElementById(tooltipId).classList.remove("active");
         }
       }
-    });
+    });*/
   }
 
-  if (target.data()["properties"].hasOwnProperty("description")) {
+  /*if (target.data()["properties"].hasOwnProperty("description")) {
     let popper = target.popper({
       content: () => {
         let tooltip = document.createElement('div');
@@ -798,5 +832,5 @@ function bindPopper(target) {
           document.getElementById(tooltipId).classList.remove("active");
         }
       });
-  }
+  }*/
 }
